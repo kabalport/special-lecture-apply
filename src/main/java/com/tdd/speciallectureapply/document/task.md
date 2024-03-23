@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS student_fail (
 
 - 시험 불합격자 명단 API
     - 시험의 불합격자 명단 리스트를 불러옵니다
-3
+32
     ```json
     GET /exam/{exam}/fail
     
