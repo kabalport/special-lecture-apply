@@ -1,6 +1,6 @@
 package com.tdd.speciallectureapply.model;
 
-import com.tdd.speciallectureapply.model.entity.SpecialLecture;
+import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

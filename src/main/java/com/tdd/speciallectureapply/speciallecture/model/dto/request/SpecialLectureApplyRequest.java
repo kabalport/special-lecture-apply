@@ -1,4 +1,4 @@
-package com.tdd.speciallectureapply.model.dto.request;
+package com.tdd.speciallectureapply.speciallecture.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

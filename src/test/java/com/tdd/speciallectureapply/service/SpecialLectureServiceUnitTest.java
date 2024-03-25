@@ -1,14 +1,12 @@
 package com.tdd.speciallectureapply.service;
 
-import com.tdd.speciallectureapply.exception.SpecialLectureException;
-import com.tdd.speciallectureapply.model.SpecialLectureApplyFixture;
-import com.tdd.speciallectureapply.model.SpecialLectureFixture;
-import com.tdd.speciallectureapply.model.dto.request.SpecialLectureApplyRequest;
-import com.tdd.speciallectureapply.model.dto.response.SpecialLectureApplyResponse;
-import com.tdd.speciallectureapply.model.entity.SpecialLecture;
-import com.tdd.speciallectureapply.model.entity.SpecialLectureApply;
-import com.tdd.speciallectureapply.repository.SpecialLectureApplyRepository;
-import com.tdd.speciallectureapply.repository.SpecialLectureRepository;
+import com.tdd.speciallectureapply.speciallecture.model.dto.request.SpecialLectureApplyRequest;
+import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
+import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
+import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
+import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureApplyRepository;
+import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureRepository;
+import com.tdd.speciallectureapply.speciallecture.service.SpecialLectureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

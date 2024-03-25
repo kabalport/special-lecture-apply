@@ -1,6 +1,6 @@
-package com.tdd.speciallectureapply.controller.advice;
+package com.tdd.speciallectureapply.speciallecture.controller.advice;
 
-import com.tdd.speciallectureapply.exception.SpecialLectureException;
+import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
 import com.tdd.speciallectureapply.global.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

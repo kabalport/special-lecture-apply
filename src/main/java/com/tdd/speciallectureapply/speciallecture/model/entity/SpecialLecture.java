@@ -1,6 +1,6 @@
-package com.tdd.speciallectureapply.model.entity;
+package com.tdd.speciallectureapply.speciallecture.model.entity;
 
-import com.tdd.speciallectureapply.exception.SpecialLectureException;
+import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

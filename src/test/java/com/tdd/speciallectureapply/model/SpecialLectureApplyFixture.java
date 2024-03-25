@@ -1,7 +1,8 @@
 package com.tdd.speciallectureapply.model;
 
-import com.tdd.speciallectureapply.model.entity.SpecialLecture;
-import com.tdd.speciallectureapply.model.entity.SpecialLectureApply;
+import com.tdd.speciallectureapply.speciallecture.model.ApplyStatus;
+import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
+import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
 
 import java.time.LocalDate;
 

@@ -1,10 +1,10 @@
-package com.tdd.speciallectureapply.controller;
+package com.tdd.speciallectureapply.speciallecture.controller;
 
-import com.tdd.speciallectureapply.model.dto.request.SpecialLectureApplyRequest;
-import com.tdd.speciallectureapply.model.dto.response.SpecialLectureApplyResponse;
-import com.tdd.speciallectureapply.model.dto.response.SpecialLectureApplyStatusResponse;
+import com.tdd.speciallectureapply.speciallecture.model.dto.request.SpecialLectureApplyRequest;
+import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
+import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyStatusResponse;
 import com.tdd.speciallectureapply.global.response.ApiResponse;
-import com.tdd.speciallectureapply.service.SpecialLectureService;
+import com.tdd.speciallectureapply.speciallecture.service.SpecialLectureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

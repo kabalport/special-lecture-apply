@@ -1,7 +1,7 @@
 package com.tdd.speciallectureapply;
 
-import com.tdd.speciallectureapply.model.entity.SpecialLecture;
-import com.tdd.speciallectureapply.repository.SpecialLectureRepository;
+import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
+import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

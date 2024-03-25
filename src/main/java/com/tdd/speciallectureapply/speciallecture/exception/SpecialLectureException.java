@@ -1,4 +1,4 @@
-package com.tdd.speciallectureapply.exception;
+package com.tdd.speciallectureapply.speciallecture.exception;
 
 public class SpecialLectureException extends RuntimeException {
 
