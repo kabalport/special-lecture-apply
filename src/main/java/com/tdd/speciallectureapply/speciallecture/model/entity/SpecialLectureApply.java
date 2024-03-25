@@ -35,14 +35,8 @@ public class SpecialLectureApply {
     @Column(nullable = false)
     private String userId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ApplyStatus specialLectureApplyStatus;
 
-    // 특강 ID를 참조하는 외래키로 ManyToOne 관계 설정
-    // SpecialLecture 클래스는 해당 특강의 상세 정보를 담는 엔티티로 가정합니다.
     @ManyToOne
     @JoinColumn(name = "special_lecture_id", nullable = false)
     private SpecialLecture specialLecture;
-
 }

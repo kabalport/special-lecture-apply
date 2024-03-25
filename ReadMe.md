@@ -1,7 +1,7 @@
 # 요구사항 분석
 ![service-flow](./src/main/java/com/tdd/speciallectureapply/document/diagram/service-flow.svg)
 # ERD
-![erd-image](./src/main/java/com/tdd/speciallectureapply/document/diagram/erd-diagram.png)
+![erd-image](./src/main/java/com/tdd/speciallectureapply/document/diagram/erd-picture.png)
 - 특강신청정보 DDL
 ```sql
 CREATE TABLE IF NOT EXISTS special_lecture_apply_info (

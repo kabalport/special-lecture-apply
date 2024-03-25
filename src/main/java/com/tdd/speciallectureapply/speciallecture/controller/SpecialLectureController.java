@@ -22,8 +22,9 @@ public class SpecialLectureController {
 
     @PostMapping("/apply")
     public ResponseEntity<ApiResponse<SpecialLectureApplyResponse>> applyForLecture(@RequestBody SpecialLectureApplyRequest request) {
-        SpecialLectureApplyResponse response = specialLectureService.applyForLecture(request);
-        return ResponseEntity.ok(ApiResponse.success(response));
+//        SpecialLectureApplyResponse response = specialLectureService.applyForLecture(request);
+//        return ResponseEntity.ok(ApiResponse.success(response));
+        return null;
     }
 
     @GetMapping("/status")

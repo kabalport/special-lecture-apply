@@ -13,7 +13,6 @@ public class SpecialLectureApplyStatusResponse {
 
     public SpecialLectureApplyStatusResponse(String userId, ApplyStatus specialLectureApplyStatus, String message) {
         this.userId = userId;
-        this.specialLectureApplyStatus = specialLectureApplyStatus;
         this.message = message;
     }
 

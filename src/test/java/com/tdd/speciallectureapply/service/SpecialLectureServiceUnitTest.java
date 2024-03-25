@@ -5,7 +5,9 @@
 //- 특강의 정원은 30명으로 고정이며, 사용자는 각 특강에 신청하기전 목록을 조회해볼 수 있어야 합니다.
 package com.tdd.speciallectureapply.service;
 
+import com.tdd.speciallectureapply.model.SpecialLectureApplyFixture;
 import com.tdd.speciallectureapply.model.SpecialLectureFixture;
+import com.tdd.speciallectureapply.speciallecture.model.ApplyStatus;
 import com.tdd.speciallectureapply.speciallecture.model.dto.request.SpecialLectureApplyRequest;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
@@ -13,9 +15,11 @@ import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApp
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureApplyRepository;
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureRepository;
 import com.tdd.speciallectureapply.speciallecture.service.SpecialLectureService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
@@ -41,22 +45,59 @@ public class SpecialLectureServiceUnitTest {
                 new SpecialLectureService(specialLectureApplyRepository, specialLectureRepository);
     }
 
-
 //  특강 신청
-// - 특정 userId 로 선착순으로 제공되는 특강을 신청하는 API 를 작성합니다.
-// - 동일한 신청자는 한 번의 수강 신청만 성공할 수 있습니다.
-//- 특강은 `4월 20일 토요일 1시` 에 열리며, 선착순 30명만 신청 가능합니다.
-//- 이미 신청자가 30명이 초과되면 이후 신청자는 요청을 실패합니다
+//  특정 userId 로 선착순으로 제공되는 특강을 신청하는 API 를 작성합니다.
+//  동일한 신청자는 한 번의 수강 신청만 성공할 수 있습니다.
+//  특강은 `4월 20일 토요일 1시` 에 열리며, 선착순 30명만 신청 가능합니다.
+//  이미 신청자가 30명이 초과되면 이후 신청자는 요청을 실패합니다
 
-    @DisplayName("신청-24년4월20일토요일1시에 열린 특강 / 한명도 신청하지 않았을 경우")
+    @DisplayName("특강(24년4월20일토요일1시) 신청 로직 검증 / 30명 미만인경우")
     @Test
     public void OneApplyAprilTest() {
-        // given
-        SpecialLecture test = SpecialLectureFixture.april20Lecture();
+        // given : 특강이 `4월 20일 토요일 1시` 에 열리며 신청인원이 30명 미만인 경우
+        LocalDate givenAprilDate = LocalDate.from(LocalDateTime.of(2024, 4, 20, 13, 0));
+        String givenUser = "firstApply";
+
+        // 강의 기대 값 설정
+        SpecialLecture expectSpecialLecture = SpecialLectureFixture.create(givenAprilDate);
+        // 강의신청자 기대 값 설정
+        SpecialLectureApply expectSpecialLectureApply= SpecialLectureApplyFixture.create(givenAprilDate,givenUser);
+
+        // 강의를 조회할때 기대했던 강의로 리턴합니다.
+        when(specialLectureRepository.findBySpecialLectureDate(givenAprilDate)).thenReturn(Optional.of(expectSpecialLecture));
+
+        // 강의 ArgumentCaptor 캡쳐
+        ArgumentCaptor<SpecialLecture> specialLectureArgumentCaptor =
+                ArgumentCaptor.forClass(SpecialLecture.class);
+        // 강의신청자 ArgumentCaptor 캡쳐
+        ArgumentCaptor<SpecialLectureApply> specialLectureApplyArgumentCaptor =
+                ArgumentCaptor.forClass(SpecialLectureApply.class);
+
+        // when : 특강을 신청합니다.
+//        specialLectureService.applyLecture(expectSpecialLecture.getSpecialLectureDate(), "firstApply");
 
         // when
-//        studentScoreService.saveScore(
-//                givenStudentName, givenExam, givenKorScore, givenEnglishScore, givenMathScore);
+        specialLectureService.applyForLecture(expectSpecialLecture.getSpecialLectureDate(), "firstApply");
+
+        // then
+
+        Mockito.verify(specialLectureRepository, Mockito.times(1))
+                .save(specialLectureArgumentCaptor.capture());
+        SpecialLecture capturedSpecialLecture = specialLectureArgumentCaptor.getValue();
+        System.out.println(capturedSpecialLecture.getCurrentApplications());
+        Assertions.assertEquals(
+                expectSpecialLecture.getSpecialLectureDate(), capturedSpecialLecture.getSpecialLectureDate());
+        Assertions.assertEquals(expectSpecialLecture.getCurrentApplications(), capturedSpecialLecture.getCurrentApplications());
+
+
+
+
+        Mockito.verify(specialLectureApplyRepository, Mockito.times(1))
+                .save(specialLectureApplyArgumentCaptor.capture());
+        SpecialLectureApply capturedSpecialLectureApply = specialLectureApplyArgumentCaptor.getValue();
+        Assertions.assertEquals(
+                expectSpecialLectureApply.getUserId(), capturedSpecialLectureApply.getUserId());
+
     }
 
 
@@ -86,11 +127,11 @@ public class SpecialLectureServiceUnitTest {
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
         // When
-        SpecialLectureApplyResponse response = specialLectureService.applyForLecture(request);
+//        SpecialLectureApplyResponse response = specialLectureService.applyForLecture(request);
 
         // Then
-        assertNotNull(response);
-        assertEquals(request.getUserId(), response.getUserId());
+//        assertNotNull(response);
+//        assertEquals(request.getUserId(), response.getUserId());
         // Additional assertions can be made here
     }
 

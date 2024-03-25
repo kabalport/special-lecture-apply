@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS special_lecture_apply_info (
     `special_lecture_id` BIGINT NOT NULL COMMENT '특강 ID',
     `special_lecture_date` DATE NOT NULL COMMENT '특강 날짜',
     `user_id` VARCHAR(255) NOT NULL COMMENT '사용자 ID',
-    `special_lecture_apply_status` ENUM('pending', 'accepted', 'rejected') NOT NULL COMMENT '특강 신청 상태',
     UNIQUE KEY `unique_user_per_lecture` (`special_lecture_date`, `user_id`),
     PRIMARY KEY (`apply_id`),
     FOREIGN KEY (`special_lecture_id`) REFERENCES special_lecture_info(`special_lecture_id`)

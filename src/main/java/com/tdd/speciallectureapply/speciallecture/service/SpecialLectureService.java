@@ -11,6 +11,8 @@ import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureApply
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -25,18 +27,29 @@ public class SpecialLectureService {
         this.specialLectureApplyRepository = specialLectureApplyRepository;
         this.specialLectureRepository = specialLectureRepository;
     }
+    public void applyLecture(
+            LocalDate specialLectureDate, String userId) {
 
-    public SpecialLectureApplyResponse applyForLecture(SpecialLectureApplyRequest request) {
+            SpecialLectureApply specialLectureApply =
+                    SpecialLectureApply.builder()
+                            .userId(userId)
+                            .specialLectureDate(specialLectureDate)
+                            .build();
+
+        specialLectureApplyRepository.save(specialLectureApply);
+
+    }
+    public SpecialLectureApplyResponse applyForLecture(LocalDate localDate,String userId) {
         // 특강 존재 여부 및 정원 초과 검사
         SpecialLecture lecture = specialLectureRepository
-                .findBySpecialLectureDate(request.getSpecialLectureDate())
+                .findBySpecialLectureDate(localDate)
                 .orElseThrow(() -> new SpecialLectureException("해당 날짜에는 특강이 없습니다."));
 
         if(lecture.getCurrentApplications() >= lecture.getMaxCapacity()) {
             throw new SpecialLectureException("정원이 초과되었습니다.");
         }
         Optional<SpecialLectureApply> isDuplicate = specialLectureApplyRepository
-                .findByUserIdAndSpecialLectureDate(request.getUserId(), request.getSpecialLectureDate());
+                .findByUserIdAndSpecialLectureDate(userId, localDate);
         // 중복 신청 검사
         if(isDuplicate.isPresent()) {
             throw new SpecialLectureException("이미 신청된 특강입니다.");
@@ -45,9 +58,8 @@ public class SpecialLectureService {
         // 특강 신청 처리
         SpecialLectureApply apply = SpecialLectureApply.builder()
                 .specialLecture(lecture)
-                .specialLectureDate(request.getSpecialLectureDate())
-                .userId(request.getUserId())
-                .specialLectureApplyStatus(ApplyStatus.PENDING)
+                .specialLectureDate(localDate)
+                .userId(userId)
                 .build();
 
         specialLectureApplyRepository.save(apply);
@@ -60,8 +72,7 @@ public class SpecialLectureService {
         return new SpecialLectureApplyResponse(
                 apply.getApplyId(),
                 apply.getSpecialLectureDate(),
-                apply.getUserId(),
-                apply.getSpecialLectureApplyStatus()
+                apply.getUserId()
         );
     }
 
@@ -72,7 +83,7 @@ public class SpecialLectureService {
             SpecialLectureApply apply = applyOptional.get();
             return new SpecialLectureApplyStatusResponse(
                     apply.getUserId(),
-                    apply.getSpecialLectureApplyStatus(),
+                    ApplyStatus.ACCEPTED,
                     "신청 상태 조회 성공."
             );
         } else {
@@ -83,4 +94,6 @@ public class SpecialLectureService {
             );
         }
     }
+
+
 }
