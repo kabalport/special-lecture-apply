@@ -1,7 +1,8 @@
+`항해플러스토요일-특강신청서비스`
 # 요구사항 분석
-![service-flow](./src/main/java/com/tdd/speciallectureapply/document/diagram/service-flow.svg)
+![service-flow](./src/main/java/com/tdd/speciallectureapply/document/diagram/2.service-flow.svg)
 # ERD
-![erd-image](./src/main/java/com/tdd/speciallectureapply/document/diagram/erd-picture.png)
+![erd-image](./src/main/java/com/tdd/speciallectureapply/document/diagram/3.erd-picture.png)
 - 특강신청정보 DDL
 ```sql
 CREATE TABLE IF NOT EXISTS special_lecture_apply_info (

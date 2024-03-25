@@ -115,3 +115,6 @@ Response:
   "special_lecture_apply_status": "rejected"
 }
 ```
+
+클래스다이어그램을 그리고 의존성을 적고
+클린아키텍쳐를 잘 해야함
