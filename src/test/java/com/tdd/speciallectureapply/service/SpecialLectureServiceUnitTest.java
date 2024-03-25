@@ -3,14 +3,15 @@
 //- 단 한번의 특강을 위한 것이 아닌 날짜별로 특강이 존재할 수 있는 범용적인 서비스로 변화시켜 봅니다.
 //- 이를 수용하기 위해, 특강 엔티티의 경우 기존의 설계에서 변경되어야 합니다.
 //- 특강의 정원은 30명으로 고정이며, 사용자는 각 특강에 신청하기전 목록을 조회해볼 수 있어야 합니다.
+
+// 특강생성
+// 특강 신청자목록
 package com.tdd.speciallectureapply.service;
 
 import com.tdd.speciallectureapply.model.SpecialLectureApplyFixture;
 import com.tdd.speciallectureapply.model.SpecialLectureFixture;
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
-import com.tdd.speciallectureapply.speciallecture.model.ApplyStatus;
 import com.tdd.speciallectureapply.speciallecture.model.dto.request.SpecialLectureApplyRequest;
-import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureApplyRepository;
@@ -57,7 +58,7 @@ public class SpecialLectureServiceUnitTest {
 // 신청날짜검증-신청날짜가지났을경우
 // 특강신청한날에 특강이없는경우
 
-    @DisplayName("정원검증/정원이 30명 초과인경우 정원이 초과되었습니다. 라는 예외를 던집니다")
+    @DisplayName("실패-정원검증/정원이 30명 초과인경우 정원이 초과되었습니다. 라는 예외를 던집니다")
     @Test
     public void 실패_정원검증_30명초과() {
         // given : test 라는 유저가 강의를 신청할때 30명이 꽉찬 강의를 리턴시킵니다.
@@ -73,7 +74,6 @@ public class SpecialLectureServiceUnitTest {
         // then : 정원이 초과되었습니다. 나오는지 확인합니다.
         assertEquals("정원이 초과되었습니다.", exception.getMessage());
     }
-// 중복신청검증-중복이아닌경우
 // 중복신청검증-중복인경우
 
 // (기본)** 특강 신청 완료 여부 조회 API

@@ -1,6 +1,5 @@
 package com.tdd.speciallectureapply.speciallecture.model.dto.response;
 
-import com.tdd.speciallectureapply.speciallecture.model.ApplyStatus;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
