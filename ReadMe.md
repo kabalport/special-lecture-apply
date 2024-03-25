@@ -1,4 +1,3 @@
-요구사항 분석 및 ERD 설계 명세 제출 
 # 요구사항 분석
 ![service-flow](./src/main/java/com/tdd/speciallectureapply/document/diagram/service-flow.svg)
 # ERD
