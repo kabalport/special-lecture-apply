@@ -2,9 +2,7 @@
 ![service-flow](./src/main/java/com/tdd/speciallectureapply/document/diagram/service-flow.svg)
 # ERD
 ![erd-image](./src/main/java/com/tdd/speciallectureapply/document/diagram/erd-diagram.png)
-- DDL
-    - 특강신청정보
-    - special_lecture_apply_info
+- DDL 특강신청정보
 ```sql
 CREATE TABLE IF NOT EXISTS special_lecture_apply_info (
     `apply_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '인조키',
@@ -18,9 +16,7 @@ CREATE TABLE IF NOT EXISTS special_lecture_apply_info (
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='특강신청정보';
 ```
-- DDL
-    - 특강정보
-    - special_lecture_info
+- DDL 특강정보
 ```sql
 CREATE TABLE IF NOT EXISTS special_lecture_info (
     `special_lecture_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '인조키',
