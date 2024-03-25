@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @Service
 public class SpecialLectureService {
-
     private final SpecialLectureApplyRepository specialLectureApplyRepository;
     private final SpecialLectureRepository specialLectureRepository;
 
@@ -27,31 +26,62 @@ public class SpecialLectureService {
         this.specialLectureApplyRepository = specialLectureApplyRepository;
         this.specialLectureRepository = specialLectureRepository;
     }
-    public void applyLecture(
-            LocalDate specialLectureDate, String userId) {
+    public void applyLecture(LocalDate applyDate, String userId) {
+        // 1. 신청날짜 유효성 검사
+        if (!applyDate.isAfter(LocalDate.now())) {
+            throw new SpecialLectureException("신청 날짜가 지났습니다.");
+        }
+        // 2. 특강 존재 여부 검사
+        SpecialLecture lecture = specialLectureRepository
+                .findBySpecialLectureDate(applyDate)
+                .orElseThrow(() -> new SpecialLectureException("해당 날짜에는 특강이 없습니다."));
 
-            SpecialLectureApply specialLectureApply =
-                    SpecialLectureApply.builder()
-                            .userId(userId)
-                            .specialLectureDate(specialLectureDate)
-                            .build();
+        // 3. 정원 초과 검사
+        if (lecture.getCurrentApplications() >= lecture.getMaxCapacity()) {
+            throw new SpecialLectureException("정원이 초과되었습니다.");
+        }
+
+        // 4. 중복 신청 검사
+        Optional<SpecialLectureApply> isDuplicate = specialLectureApplyRepository
+                .findByUserIdAndSpecialLectureDate(userId, applyDate);
+        if (isDuplicate.isPresent()) {
+            throw new SpecialLectureException("이미 신청된 특강입니다.");
+        }
+
+        // 특강 신청 처리
+        SpecialLectureApply specialLectureApply = SpecialLectureApply.builder()
+                .specialLecture(lecture)
+                .specialLectureDate(applyDate)
+                .userId(userId)
+                .build();
 
         specialLectureApplyRepository.save(specialLectureApply);
 
+        // 정원 업데이트
+        lecture.increaseCurrentApplications();
+        specialLectureRepository.save(lecture);
+
     }
     public SpecialLectureApplyResponse applyForLecture(LocalDate localDate,String userId) {
-        // 특강 존재 여부 및 정원 초과 검사
+        // 1. 현재 날짜와 신청 날짜 비교
+        if (!localDate.isAfter(LocalDate.now())) {
+            throw new SpecialLectureException("신청 날짜가 유효하지 않습니다.");
+        }
+
+        // 2. 특강 존재 여부 검사
         SpecialLecture lecture = specialLectureRepository
                 .findBySpecialLectureDate(localDate)
                 .orElseThrow(() -> new SpecialLectureException("해당 날짜에는 특강이 없습니다."));
 
-        if(lecture.getCurrentApplications() >= lecture.getMaxCapacity()) {
+        // 3. 정원 초과 검사
+        if (lecture.getCurrentApplications() >= lecture.getMaxCapacity()) {
             throw new SpecialLectureException("정원이 초과되었습니다.");
         }
+
+        // 4. 중복 신청 검사
         Optional<SpecialLectureApply> isDuplicate = specialLectureApplyRepository
                 .findByUserIdAndSpecialLectureDate(userId, localDate);
-        // 중복 신청 검사
-        if(isDuplicate.isPresent()) {
+        if (isDuplicate.isPresent()) {
             throw new SpecialLectureException("이미 신청된 특강입니다.");
         }
 
@@ -74,6 +104,7 @@ public class SpecialLectureService {
                 apply.getSpecialLectureDate(),
                 apply.getUserId()
         );
+
     }
 
     public SpecialLectureApplyStatusResponse getLectureApplicationStatus(String userId) {

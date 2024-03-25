@@ -15,9 +15,10 @@ public class SpecialLectureApplyResponse {
     private Long applyId;
     private LocalDate specialLectureDate;
     private String userId;
+//    private ApplyStatus specialLectureApplyStatus;
 
 //    public SpecialLectureApplyResponse(Long applyId, LocalDate specialLectureDate, String userId, ApplyStatus specialLectureApplyStatus) {
-//    }
+////    }
 
     // Constructors, Getters and Setters
 }
