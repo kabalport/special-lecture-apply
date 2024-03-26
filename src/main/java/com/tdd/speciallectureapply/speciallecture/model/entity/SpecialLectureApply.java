@@ -1,13 +1,7 @@
 package com.tdd.speciallectureapply.speciallecture.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,21 +13,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "special_lecture_apply_info")
+@Table(name = "special_lecture_apply_info", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"special_lecture_date", "user_id"}, name = "unique_user_per_lecture")
+})
 public class SpecialLectureApply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long applyId;
+    @Column(name = "apply_id")
+    private Long id;
 
-    @Column(nullable = false)
-    private LocalDate specialLectureDate;
-
-    @Column(nullable = false)
-    private String userId;
-
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "special_lecture_id", nullable = false)
     private SpecialLecture specialLecture;
+
+    @Column(name = "special_lecture_date", nullable = false)
+    private LocalDate specialLectureDate;
+
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
 }

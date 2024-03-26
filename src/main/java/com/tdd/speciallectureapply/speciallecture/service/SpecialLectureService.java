@@ -41,7 +41,7 @@ public class SpecialLectureService {
     public SpecialLecture createLecture(LocalDate lectureDate, int maxCapacity) {
         // 강의 생성
         SpecialLecture newLecture = SpecialLecture.builder()
-                .specialLectureDate(lectureDate)
+                .date(lectureDate)
                 .maxCapacity(maxCapacity)
                 .currentApplications(0)
                 .build();

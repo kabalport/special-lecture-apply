@@ -23,16 +23,19 @@ public class SpecialLecture {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long specialLectureId;
+    @Column(name = "special_lecture_id")
+    private Long id;
 
-    @Column(nullable = false)
-    private LocalDate specialLectureDate;
 
-    @Column(nullable = false)
-    private Integer maxCapacity;
+    @Column(name = "special_lecture_date", nullable = false, unique = true)
+    private LocalDate date;
 
-    @Column(nullable = false)
-    private Integer currentApplications;
+    @Column(name = "max_capacity", nullable = false)
+    private int maxCapacity;
+
+
+    @Column(name = "current_applications", nullable = false)
+    private int currentApplications;
 
 
     public void increaseCurrentApplications() {

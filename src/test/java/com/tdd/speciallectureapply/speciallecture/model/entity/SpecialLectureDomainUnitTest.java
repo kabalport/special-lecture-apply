@@ -1,7 +1,6 @@
-package com.tdd.speciallectureapply.speciallecture.domain;
+package com.tdd.speciallectureapply.speciallecture.model.entity;
 
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
-import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -9,13 +8,13 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class SpecialLectureTest {
+public class SpecialLectureDomainUnitTest {
 
     @Test
-    public void whenCapacityIsNotFull_thenIncreaseCurrentApplications() {
+    public void 정원테스트_30명미만() {
         // given
         SpecialLecture lecture = SpecialLecture.builder()
-                .specialLectureDate(LocalDate.now())
+                .date(LocalDate.now())
                 .maxCapacity(30)
                 .currentApplications(29)
                 .build();
@@ -28,10 +27,10 @@ public class SpecialLectureTest {
     }
 
     @Test
-    public void whenCapacityIsFull_thenThrowException() {
+    public void 정원테스트_30명초과_예외발생() {
         // given
         SpecialLecture lecture = SpecialLecture.builder()
-                .specialLectureDate(LocalDate.now())
+                .date(LocalDate.now())
                 .maxCapacity(30)
                 .currentApplications(30)
                 .build();

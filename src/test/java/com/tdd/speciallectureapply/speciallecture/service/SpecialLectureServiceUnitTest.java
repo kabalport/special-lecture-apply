@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
  *  이미 신청자가 30명이 초과되면 이후 신청자는 요청을 실패합니다
  */
 public class SpecialLectureServiceUnitTest {
-    private SpecialLectureService specialLectureService;
+    private SpecialLectureService sut;
     private SpecialLectureApplyRepository specialLectureApplyRepository;
     private SpecialLectureRepository specialLectureRepository;
 
@@ -41,7 +41,7 @@ public class SpecialLectureServiceUnitTest {
     public void beforeEach() {
         specialLectureApplyRepository = Mockito.mock(SpecialLectureApplyRepository.class);
         specialLectureRepository = Mockito.mock(SpecialLectureRepository.class);
-        specialLectureService =
+        sut =
                 new SpecialLectureService(specialLectureApplyRepository, specialLectureRepository);
     }
 
@@ -53,7 +53,7 @@ public class SpecialLectureServiceUnitTest {
         int givenMaxCapacity = 30;
 
         SpecialLecture expectedLecture = SpecialLecture.builder()
-                .specialLectureDate(givenLectureDate)
+                .date(givenLectureDate)
                 .maxCapacity(givenMaxCapacity)
                 .currentApplications(0)
                 .build();
@@ -61,11 +61,11 @@ public class SpecialLectureServiceUnitTest {
         when(specialLectureRepository.save(any(SpecialLecture.class))).thenReturn(expectedLecture);
 
         // when: 강의 생성 메서드 호출
-        SpecialLecture createdLecture = specialLectureService.  createLecture(givenLectureDate, givenMaxCapacity);
+        SpecialLecture createdLecture = sut.  createLecture(givenLectureDate, givenMaxCapacity);
 
         // then: 생성된 강의 정보 검증
         assertNotNull(createdLecture, "생성된 강의 정보는 null이 아니어야 합니다.");
-        assertEquals(givenLectureDate, createdLecture.getSpecialLectureDate(), "강의 날짜가 예상과 일치해야 합니다.");
+        assertEquals(givenLectureDate, createdLecture.getDate(), "강의 날짜가 예상과 일치해야 합니다.");
         assertEquals(givenMaxCapacity, createdLecture.getMaxCapacity(), "강의 최대 정원이 예상과 일치해야 합니다.");
         assertEquals(0, createdLecture.getCurrentApplications(), "초기 강의 신청 인원은 0이어야 합니다.");
     }
@@ -79,7 +79,7 @@ public class SpecialLectureServiceUnitTest {
 
         // when: applyLecture 메서드를 호출할 때 이 과거 날짜를 사용하고, 결과로 발생하는 예외를 캡처
         Exception exception = assertThrows(SpecialLectureException.class, () -> {
-            specialLectureService.applyLecture(pastDate, givenUser);
+            sut.applyLecture(pastDate, givenUser);
         });
 
         // then: 예외 메시지가 "신청 날짜가 지났습니다."인지 확인
@@ -93,11 +93,11 @@ public class SpecialLectureServiceUnitTest {
         // given
         LocalDate givenAprilDate = LocalDate.of(2024, 4, 20);
         SpecialLecture expectSpecialLecture = SpecialLectureFixture.create(givenAprilDate);
-        when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getSpecialLectureDate())).thenReturn(Optional.empty());
+        when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getDate())).thenReturn(Optional.empty());
 
         // when
         Exception exception = assertThrows(SpecialLectureException.class, () -> {
-            specialLectureService.applyLecture(expectSpecialLecture.getSpecialLectureDate(), givenUser);
+            sut.applyLecture(expectSpecialLecture.getDate(), givenUser);
         });
 
         // then
@@ -109,11 +109,11 @@ public class SpecialLectureServiceUnitTest {
     public void 실패_정원검증_30명초과() {
         // given : test 라는 유저가 강의를 신청할때 30명이 꽉찬 강의를 리턴시킵니다.
         SpecialLecture expectSpecialLecture = SpecialLectureFixture.failedMaxCapacity();
-        when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getSpecialLectureDate())).thenReturn(Optional.of(expectSpecialLecture));
+        when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getDate())).thenReturn(Optional.of(expectSpecialLecture));
 
         // when : test 라는 유저가 정원 30명이 꽉찬 강의를 신청하면 예외를 던져줍니다. - 정원이 초과되었습니다.
         Exception exception = assertThrows(SpecialLectureException.class, () -> {
-                    specialLectureService.applyLecture(expectSpecialLecture.getSpecialLectureDate(), givenUser);
+            sut.applyLecture(expectSpecialLecture.getDate(), givenUser);
         });
 
         // then : 정원이 초과되었습니다. 나오는지 확인합니다.
@@ -134,13 +134,13 @@ public class SpecialLectureServiceUnitTest {
         ArgumentCaptor<SpecialLectureApply> specialLectureApplyArgumentCaptor =
                 ArgumentCaptor.forClass(SpecialLectureApply.class);
         // when : 특강을 신청합니다.
-        specialLectureService.applyLecture(givenAprilDate, givenUser);
+        sut.applyLecture(givenAprilDate, givenUser);
         // then 검증
         // 강의레포지토리가 한번 저장 실행되었습니다.
         // 강의날짜,강의신청자 비교
         Mockito.verify(specialLectureRepository, Mockito.times(1)).save(specialLectureArgumentCaptor.capture());
         SpecialLecture capturedSpecialLecture = specialLectureArgumentCaptor.getValue();
-        Assertions.assertEquals(expectSpecialLecture.getSpecialLectureDate(), capturedSpecialLecture.getSpecialLectureDate());
+        Assertions.assertEquals(expectSpecialLecture.getDate(), capturedSpecialLecture.getDate());
         Assertions.assertEquals(expectSpecialLecture.getCurrentApplications(), capturedSpecialLecture.getCurrentApplications());
         // 강의신청 레포지토리가 한번 저장 실행되었습니다.
         // 강의신청자 아이디 비교
@@ -161,7 +161,7 @@ public void 특강신청에실패한사용자의_특강신청완료여부확인(
     when(specialLectureApplyRepository.findByUserId(failedUserId)).thenReturn(Optional.empty());
 
     // when: 사용자의 특강 신청 완료 여부를 조회
-    SpecialLectureApplyStatusResponse response = specialLectureService.getLectureApplicationStatus(failedUserId);
+    SpecialLectureApplyStatusResponse response = sut.getLectureApplicationStatus(failedUserId);
 
     // then: 특강 등록자 명단에 없는 사용자는 실패했음을 확인
     assertNull(response.getSpecialLectureApplyStatus(), "신청 상태는 null이어야 합니다.");
@@ -183,7 +183,7 @@ public void 특강신청에실패한사용자의_특강신청완료여부확인(
         when(specialLectureApplyRepository.findByUserId(successUserId)).thenReturn(Optional.of(successfulApplication));
 
         // when: 사용자의 특강 신청 완료 여부를 조회
-        SpecialLectureApplyStatusResponse response = specialLectureService.getLectureApplicationStatus(successUserId);
+        SpecialLectureApplyStatusResponse response = sut.getLectureApplicationStatus(successUserId);
 
         // then: 특강 신청에 성공한 사용자는 성공했음을 확인
         assertEquals("신청 상태 조회 성공.", response.getMessage(), "응답 메시지가 예상과 다릅니다.");
@@ -201,7 +201,7 @@ public void 특강신청에실패한사용자의_특강신청완료여부확인(
         Mockito.when(specialLectureApplyRepository.findAll()).thenReturn(List.of());
 
         // when
-        List<SpecialLectureApplyResponse> responses = specialLectureService.getPassLectureApplyList(givenAprilDate);
+        List<SpecialLectureApplyResponse> responses = sut.getPassLectureApplyList(givenAprilDate);
 
         // then
         assertTrue(responses.isEmpty(), "신청자가 없을 때 비어있는 목록이 반환되어야 합니다.");
@@ -229,7 +229,7 @@ public void 특강신청에실패한사용자의_특강신청완료여부확인(
                 List.of(expectUser1, expectUser2).stream()
                         .map((pass) -> new SpecialLectureApplyResponse(pass.getSpecialLectureDate(), pass.getUserId()))
                         .toList();
-        List<SpecialLectureApplyResponse> responses = specialLectureService.getPassLectureApplyList(givenAprilDate);
+        List<SpecialLectureApplyResponse> responses = sut.getPassLectureApplyList(givenAprilDate);
 
 
         // then
