@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/api/special-lectures")
 public class SpecialLectureController {
@@ -28,8 +30,8 @@ public class SpecialLectureController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<ApiResponse<SpecialLectureApplyStatusResponse>> getLectureApplicationStatus(@RequestParam String userId) {
-        SpecialLectureApplyStatusResponse response = specialLectureService.getLectureApplicationStatus(userId);
+    public ResponseEntity<ApiResponse<SpecialLectureApplyStatusResponse>> getLectureApplicationStatus(@RequestParam String userId, LocalDate date) {
+        SpecialLectureApplyStatusResponse response = specialLectureService.getLectureApplicationStatus(userId,date);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

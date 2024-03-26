@@ -97,21 +97,21 @@ public class SpecialLectureService {
      * @param userId
      * @return
      */
-    public SpecialLectureApplyStatusResponse getLectureApplicationStatus(String userId) {
-        Optional<SpecialLectureApply> applyOptional = specialLectureApplyRepository.findByUserId(userId);
+    public SpecialLectureApplyStatusResponse getLectureApplicationStatus(String userId, LocalDate date) {
+        Optional<SpecialLectureApply> applyOptional = specialLectureApplyRepository.findByUserIdAndSpecialLectureDate(userId,date);
 
         if (applyOptional.isPresent()) {
             SpecialLectureApply apply = applyOptional.get();
             return new SpecialLectureApplyStatusResponse(
                     apply.getUserId(),
                     ApplyStatus.ACCEPTED,
-                    "신청 상태 조회 성공."
+                    "특강 신청 완료 성공."
             );
         } else {
             return new SpecialLectureApplyStatusResponse(
                     userId,
-                    null,
-                    "신청한 특강이 없거나 신청이 실패하였습니다."
+                    ApplyStatus.REJECTED,
+                    "특강 신청 완료 실패"
             );
         }
     }
