@@ -2,6 +2,7 @@ package com.tdd.speciallectureapply.speciallecture.service;
 
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
 import com.tdd.speciallectureapply.speciallecture.model.common.ApplyStatus;
+import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureResponse;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
@@ -130,5 +131,16 @@ public class SpecialLectureService {
                 .toList();
     }
 
+
+    /**
+     * TODO - 특강 목록 조회
+     */
+    public List<SpecialLectureResponse> getSpecialLectureList() {
+        List<SpecialLecture> lectureApplies = specialLectureRepository.findAll();
+
+        return lectureApplies.stream()
+                .map((list) -> new SpecialLectureResponse(list.getDate(), list.getCurrentApplications()))
+                .toList();
+    }
 
 }
