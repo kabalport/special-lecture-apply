@@ -10,8 +10,6 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 @AllArgsConstructor
 public class SpecialLectureApplyResponse {
-
-    private Long applyId;
     private LocalDate specialLectureDate;
     private String userId;
 //    private ApplyStatus specialLectureApplyStatus;

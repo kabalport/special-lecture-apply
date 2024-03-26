@@ -1,10 +1,4 @@
-`특강신청서비스`
-
-## 설명
-- 특강을 신청할 수 있는 서비스 개발
-- 특강 신청 및 신청자 목록 관리를 RDBMS를 이용해 관리할 방법을 고민합니다
-
-
+`항해플러스토요일-특강신청서비스`
 # 요구사항 분석
 ![service-flow](./src/main/java/com/tdd/speciallectureapply/document/diagram/2.service-flow.svg)
 # ERD
@@ -34,4 +28,3 @@ CREATE TABLE IF NOT EXISTS special_lecture_info (
   UNIQUE KEY `unique_date` (`special_lecture_date`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='특강정보';
 ```
-
