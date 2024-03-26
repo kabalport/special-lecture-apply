@@ -40,9 +40,10 @@ public class SpecialLecture {
 
     public void increaseCurrentApplications() {
         if (this.currentApplications < this.maxCapacity) {
-            this.currentApplications++;
+            this.currentApplications += 1;
         } else {
             throw new SpecialLectureException("정원이 이미 초과되었습니다.");
         }
     }
+
 }

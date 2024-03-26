@@ -9,9 +9,9 @@
 # 요구사항 분석
 ![service-flow](./src/main/java/com/tdd/speciallectureapply/document/diagram/2.service-flow.svg)
 - 특강선택 신청 API
-  - 사용자아이디와 선택날짜 로 선착순으로 제공되는 특강을 신청하는 API 를 작성합니다. 
-  - 해당날짜에 특강을 선택해서 특강을 신청할 수 있습니다.
+  - `사용자아이디`와 `선택날짜`로 선착순으로 제공되는 특강을 신청하는 API 를 작성합니다.
   - 신청자는 `날짜별로` 특강을 신청합니다.
+  - 해당날짜에 특강을 선택해서 특강을 신청할 수 있습니다.
   - ~~특강은 `4월 20일 토요일 1시` 에 열리며, 선착순 30명만 신청 가능합니다.~~
   - 신청자가 30명 초과라면 신청자는 특강을 신청할 수 없습니다.
   - 신청자가 30명 이하라면 특강신청정보에 저장됩니다.
@@ -62,3 +62,7 @@ CREATE TABLE IF NOT EXISTS special_lecture_info (
 # 고려사항
 - 같은 사용자에게 여러 번의 특강 슬롯이 제공되지 않도록 제한할 방법을 고민해 봅니다.
   - 슬롯????
+
+
+# 특강 레이어드 아키텍처
+![class-diagram](./src/main/java/com/tdd/speciallectureapply/document/diagram/4.class-diagram.svg)

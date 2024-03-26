@@ -8,6 +8,7 @@ import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLect
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyStatusResponse;
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureApplyRepository;
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,7 @@ public class SpecialLectureService {
      * @param maxCapacity 강의 최대 정원
      * @return 생성된 강의 정보
      */
+    @Transactional
     public SpecialLecture createLecture(LocalDate lectureDate, int maxCapacity) {
         // 강의 생성
         SpecialLecture newLecture = SpecialLecture.builder()
@@ -56,6 +58,7 @@ public class SpecialLectureService {
      * @param applyDate
      * @param userId
      */
+    @Transactional
     public void applyLecture(LocalDate applyDate, String userId) {
         // 1. 신청날짜 유효성 검사
         if (!applyDate.isAfter(LocalDate.now())) {
