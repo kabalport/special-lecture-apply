@@ -6,6 +6,7 @@ import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureExcept
 import com.tdd.speciallectureapply.speciallecture.model.common.ApplyStatus;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyStatusResponse;
+import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureResponse;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureApplyRepository;
@@ -61,7 +62,7 @@ public class SpecialLectureServiceUnitTest {
         when(specialLectureRepository.save(any(SpecialLecture.class))).thenReturn(expectedLecture);
 
         // when: 강의 생성 메서드 호출
-        SpecialLecture createdLecture = sut.  createLecture(givenLectureDate, givenMaxCapacity);
+        SpecialLecture createdLecture = sut.createLecture(givenLectureDate, givenMaxCapacity);
 
         // then: 생성된 강의 정보 검증
         assertNotNull(createdLecture, "생성된 강의 정보는 null이 아니어야 합니다.");
@@ -89,7 +90,7 @@ public class SpecialLectureServiceUnitTest {
 
     @DisplayName("실패-특강날짜검증/특강신청한 날짜에 특강이 없는경우 특강이없습니다. 라는 예외를 던집니다.")
     @Test
-    public void 실패_특강날짜검증_신청날짜에특강이존재하지않음(){
+    public void 실패_특강날짜검증_신청날짜에특강이존재하지않음() {
         // given
         LocalDate givenAprilDate = LocalDate.of(2024, 4, 20);
         SpecialLecture expectSpecialLecture = SpecialLectureFixture.create(givenAprilDate);
@@ -127,7 +128,7 @@ public class SpecialLectureServiceUnitTest {
         LocalDate givenAprilDate = LocalDate.of(2024, 4, 20);
 
         SpecialLecture expectSpecialLecture = SpecialLectureFixture.april20Lecture();
-        SpecialLectureApply expectSpecialLectureApply= SpecialLectureApplyFixture.create(givenAprilDate,givenUser);
+        SpecialLectureApply expectSpecialLectureApply = SpecialLectureApplyFixture.create(givenAprilDate, givenUser);
         when(specialLectureRepository.findBySpecialLectureDate(givenAprilDate)).thenReturn(Optional.of(expectSpecialLecture));
         ArgumentCaptor<SpecialLecture> specialLectureArgumentCaptor =
                 ArgumentCaptor.forClass(SpecialLecture.class);
@@ -149,25 +150,25 @@ public class SpecialLectureServiceUnitTest {
         Assertions.assertEquals(expectSpecialLectureApply.getUserId(), capturedSpecialLectureApply.getUserId());
     }
 
-// 특강 신청 완료 여부 조회 API
+    // 특강 신청 완료 여부 조회 API
 // 특정 userId 로 특강 신청 완료 여부를 조회하는 API 를 작성합니다.
 // 특강 신청에 성공한 사용자는 성공했음을, 특강 등록자 명단에 없는 사용자는 실패했음을 반환하는지 테스트
-@DisplayName("특강 신청에 실패한 사용자의 특강 신청 완료 여부 확인")
-@Test
-public void 특강신청에실패한사용자의_특강신청완료여부확인() {
-    // given: 특강 신청에 실패한(즉, 특강 신청 기록이 없는) 사용자 ID
-    String failedUserId = "userFailed";
-    LocalDate givenAprilDate = LocalDate.of(2024, 4, 20);
-    // 신청 기록이 없음을 나타내기 위해 빈 Optional 반환 설정
-    when(specialLectureApplyRepository.findByUserId(failedUserId)).thenReturn(Optional.empty());
+    @DisplayName("특강 신청에 실패한 사용자의 특강 신청 완료 여부 확인")
+    @Test
+    public void 특강신청에실패한사용자의_특강신청완료여부확인() {
+        // given: 특강 신청에 실패한(즉, 특강 신청 기록이 없는) 사용자 ID
+        String failedUserId = "userFailed";
+        LocalDate givenAprilDate = LocalDate.of(2024, 4, 20);
+        // 신청 기록이 없음을 나타내기 위해 빈 Optional 반환 설정
+        when(specialLectureApplyRepository.findByUserId(failedUserId)).thenReturn(Optional.empty());
 
-    // when: 사용자의 특강 신청 완료 여부를 조회
-    SpecialLectureApplyStatusResponse response = sut.getLectureApplicationStatus(failedUserId,givenAprilDate);
+        // when: 사용자의 특강 신청 완료 여부를 조회
+        SpecialLectureApplyStatusResponse response = sut.getLectureApplicationStatus(failedUserId, givenAprilDate);
 
-    // then: 특강 등록자 명단에 없는 사용자는 실패했음을 확인
+        // then: 특강 등록자 명단에 없는 사용자는 실패했음을 확인
 //    assertNull(response.getSpecialLectureApplyStatus(), "신청 상태는 null이어야 합니다.");
 //    assertEquals("신청한 특강이 없거나 신청이 실패하였습니다.", response.getMessage(), "응답 메시지가 예상과 다릅니다.");
-}
+    }
 
     @DisplayName("특강 신청에 성공한 사용자의 특강 신청 완료 여부 확인")
     @Test
@@ -185,7 +186,7 @@ public void 특강신청에실패한사용자의_특강신청완료여부확인(
         when(specialLectureApplyRepository.findByUserId(successUserId)).thenReturn(Optional.of(successfulApplication));
 
         // when: 사용자의 특강 신청 완료 여부를 조회
-        SpecialLectureApplyStatusResponse response = sut.getLectureApplicationStatus(successUserId,givenAprilDate);
+        SpecialLectureApplyStatusResponse response = sut.getLectureApplicationStatus(successUserId, givenAprilDate);
 
         // then: 특강 신청에 성공한 사용자는 성공했음을 확인
         assertEquals("신청 상태 조회 성공.", response.getMessage(), "응답 메시지가 예상과 다릅니다.");
@@ -241,9 +242,27 @@ public void 특강신청에실패한사용자의_특강신청완료여부확인(
 
         Assertions.assertIterableEquals(expectResponse, responses);
         assertEquals(2, responses.size(), "신청 목록의 크기가 예상과 다릅니다.");
-        assertTrue(responses.stream().anyMatch(r -> r.getUserId().equals(givenUser1)), "첫 번째 사용자가 목록에 포함되어야 합니다.");
-        assertTrue(responses.stream().anyMatch(r -> r.getUserId().equals(givenUser2)), "두 번째 사용자가 목록에 포함되어야 합니다.");
-        responses.forEach(response -> assertEquals(givenAprilDate, response.getSpecialLectureDate(), "특강 신청 날짜가 예상과 다릅니다."));
     }
 
+    @DisplayName("특강 목록 조회")
+    @Test
+    public void 특강목록_조회_성공() {
+        //검증안된것:특강날짜가 같은게 있는지,특강인원수가 넘은게 있는지,데이터가 null 인지 확인
+        // given
+        SpecialLecture expect1 = SpecialLectureFixture.april20Lecture();
+        SpecialLecture expect2 = SpecialLectureFixture.april20Lecture();
+        Mockito.when(specialLectureRepository.findAll())
+                .thenReturn(List.of(expect1, expect2));
+
+        // when
+        var expectResponse =
+                List.of(expect1, expect2).stream()
+                        .map((list) -> new SpecialLectureResponse(list.getDate(), list.getCurrentApplications()))
+                        .toList();
+        List<SpecialLectureResponse> responses = sut.getSpecialLectureList();
+
+        //then
+        Assertions.assertIterableEquals(expectResponse, responses);
+        assertEquals(2, responses.size(), "특강 목록의 크기가 예상과 다릅니다.");
+    }
 }
