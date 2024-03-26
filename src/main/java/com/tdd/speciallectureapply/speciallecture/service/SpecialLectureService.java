@@ -28,7 +28,7 @@ public class SpecialLectureService {
     public void applyLecture(LocalDate applyDate, String userId) {
         // 1. 신청날짜 유효성 검사
         if (!applyDate.isAfter(LocalDate.now())) {
-            throw new SpecialLectureException("신청 날짜가 지났습니다.");
+            throw new SpecialLectureException("신청 날짜가 유효하지않습니다.");
         }
         // 2. 특강 존재 여부 검사
         SpecialLecture lecture = specialLectureRepository
@@ -68,8 +68,8 @@ public class SpecialLectureService {
         }
 
         // 2. 특강 존재 여부 검사
-        SpecialLecture lecture = specialLectureRepository
-                .findBySpecialLectureDate(localDate)
+
+        SpecialLecture lecture = specialLectureRepository.findBySpecialLectureDate(localDate)
                 .orElseThrow(() -> new SpecialLectureException("해당 날짜에는 특강이 없습니다."));
 
         // 3. 정원 초과 검사

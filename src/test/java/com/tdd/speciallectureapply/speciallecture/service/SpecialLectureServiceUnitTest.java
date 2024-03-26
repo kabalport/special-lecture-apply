@@ -6,34 +6,33 @@
 
 // 특강생성
 // 특강 신청자목록
-package com.tdd.speciallectureapply.service;
+package com.tdd.speciallectureapply.speciallecture.service;
 
-import com.tdd.speciallectureapply.model.SpecialLectureApplyFixture;
-import com.tdd.speciallectureapply.model.SpecialLectureFixture;
+import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureApplyFixture;
+import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureFixture;
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
-import com.tdd.speciallectureapply.speciallecture.model.dto.request.SpecialLectureApplyRequest;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureApplyRepository;
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureRepository;
-import com.tdd.speciallectureapply.speciallecture.service.SpecialLectureService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
-
-import static com.tdd.speciallectureapply.model.SpecialLectureFixture.april20Lecture;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
+/**
+ * 특강신청
+ *  특정 userId 로 선착순으로 제공되는 특강을 신청하는 API 를 작성합니다.
+ *  동일한 신청자는 한 번의 수강 신청만 성공할 수 있습니다.
+ *  특강은 `4월 20일 토요일 1시` 에 열리며, 선착순 30명만 신청 가능합니다.
+ *  이미 신청자가 30명이 초과되면 이후 신청자는 요청을 실패합니다
+ */
 public class SpecialLectureServiceUnitTest {
     private SpecialLectureService specialLectureService;
     private SpecialLectureApplyRepository specialLectureApplyRepository;
@@ -47,16 +46,40 @@ public class SpecialLectureServiceUnitTest {
                 new SpecialLectureService(specialLectureApplyRepository, specialLectureRepository);
     }
 
-    /**
-     * 특강신청
-     *  특정 userId 로 선착순으로 제공되는 특강을 신청하는 API 를 작성합니다.
-     *  동일한 신청자는 한 번의 수강 신청만 성공할 수 있습니다.
-     *  특강은 `4월 20일 토요일 1시` 에 열리며, 선착순 30명만 신청 가능합니다.
-     *  이미 신청자가 30명이 초과되면 이후 신청자는 요청을 실패합니다
-     */
 
-// 신청날짜검증-신청날짜가지났을경우
-// 특강신청한날에 특강이없는경우
+    @DisplayName("실패-신청날짜유효성검증/특강신청한 날짜가 과거인 경우 '신청 날짜가 유효하지않습니다.' 라는 예외를 던집니다.")
+    @Test
+    public void 실패_신청날짜검증_신청날이오늘보다과거() {
+        // given: 현재 날짜보다 이전인 날짜로 특강 신청 시도
+        String givenUser = "test";
+        LocalDate pastDate = LocalDate.now().minusDays(1); // 오늘 날짜에서 하루를 뺀 과거 날짜
+
+        // when: applyLecture 메서드를 호출할 때 이 과거 날짜를 사용하고, 결과로 발생하는 예외를 캡처
+        Exception exception = assertThrows(SpecialLectureException.class, () -> {
+            specialLectureService.applyLecture(pastDate, givenUser);
+        });
+
+        // then: 예외 메시지가 "신청 날짜가 지났습니다."인지 확인
+        assertEquals("신청 날짜가 유효하지않습니다.", exception.getMessage());
+    }
+
+
+    @DisplayName("실패-특강날짜검증/특강신청한 날짜에 특강이 없는경우 특강이없습니다. 라는 예외를 던집니다.")
+    @Test
+    public void 실패_특강날짜검증_신청날짜에특강이존재하지않음(){
+        // given
+        String givenUser= "test";
+        SpecialLecture expectSpecialLecture = SpecialLectureFixture.create(LocalDate.from(LocalDateTime.of(2024, 4, 21, 13, 0)));
+        when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getSpecialLectureDate())).thenReturn(Optional.empty());
+
+        // when
+        Exception exception = assertThrows(SpecialLectureException.class, () -> {
+            specialLectureService.applyLecture(expectSpecialLecture.getSpecialLectureDate(), givenUser);
+        });
+
+        // then
+        assertEquals("해당 날짜에는 특강이 없습니다.", exception.getMessage());
+    }
 
     @DisplayName("실패-정원검증/정원이 30명 초과인경우 정원이 초과되었습니다. 라는 예외를 던집니다")
     @Test
@@ -74,10 +97,8 @@ public class SpecialLectureServiceUnitTest {
         // then : 정원이 초과되었습니다. 나오는지 확인합니다.
         assertEquals("정원이 초과되었습니다.", exception.getMessage());
     }
-// 중복신청검증-중복인경우
 
 // (기본)** 특강 신청 완료 여부 조회 API
-//
 
 // 특정 userId 로 특강 신청 완료 여부를 조회하는 API 를 작성합니다.
 // 특강 신청에 성공한 사용자는 성공했음을, 특강 등록자 명단에 없는 사용자는 실패했음을 반환하는지 테스트
@@ -88,45 +109,6 @@ public class SpecialLectureServiceUnitTest {
 
 
 
-//특강가능한강의를신청시_정상적인데이터로_성공한결과
-    @Test
-    public void whenApplyForLecture_givenAvailableLecture_thenSucceeds() {
-        // Given
-        LocalDateTime lectureDateTime = LocalDateTime.of(2023, 4, 20, 13, 0);
-        SpecialLecture specialLecture = april20Lecture();
-        SpecialLectureApplyRequest request = new SpecialLectureApplyRequest(LocalDate.now(),"123");
-        // Set request fields appropriately
-        when(specialLectureRepository.findBySpecialLectureDate(lectureDateTime.toLocalDate()))
-                .thenReturn(Optional.of(specialLecture));
-        when(specialLectureApplyRepository.save(any(SpecialLectureApply.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
-
-        // When
-//        SpecialLectureApplyResponse response = specialLectureService.applyForLecture(request);
-
-        // Then
-//        assertNotNull(response);
-//        assertEquals(request.getUserId(), response.getUserId());
-        // Additional assertions can be made here
-    }
-
-//    @Test
-//    public void whenApplyForLecture_givenFullLecture_thenThrowsException() {
-//        // Given
-//        LocalDateTime lectureDateTime = LocalDateTime.of(2023, 4, 20, 13, 0);
-//        SpecialLecture specialLecture = SpecialLectureFixture.createSpecialLecture(1L, lectureDateTime.toLocalDate(), 30, 30);
-//        SpecialLectureApplyRequest request = new SpecialLectureApplyRequest();
-//        // Set request fields appropriately
-//        when(specialLectureRepository.findBySpecialLectureDate(lectureDateTime.toLocalDate()))
-//                .thenReturn(Optional.of(specialLecture));
-//
-//        // When & Then
-//        assertThrows(SpecialLectureException.class, () -> {
-//            specialLectureService.applyForLecture(request);
-//        });
-//    }
-
-    // Additional test cases here
 
 
     @DisplayName("성공-4월 20일 토요일 1시에 정원이 30명 미만이고 신청유저아이디가 중복이 아니고, 신청날짜에 특강이 존재하고 신청날짜가 유효한경우")

@@ -1,4 +1,4 @@
-package com.tdd.speciallectureapply.model;
+package com.tdd.speciallectureapply.speciallecture.model;
 
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
