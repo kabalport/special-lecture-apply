@@ -57,12 +57,3 @@ CREATE TABLE IF NOT EXISTS special_lecture_info (
   UNIQUE KEY `unique_date` (`special_lecture_date`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='특강정보';
 ```
-
-
-# 고려사항
-- 같은 사용자에게 여러 번의 특강 슬롯이 제공되지 않도록 제한할 방법을 고민해 봅니다.
-  - 슬롯????
-
-
-# 특강 레이어드 아키텍처
-![class-diagram](./src/main/java/com/tdd/speciallectureapply/document/diagram/4.class-diagram.svg)
