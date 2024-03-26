@@ -27,3 +27,6 @@ CREATE TABLE IF NOT EXISTS special_lecture_info (
   UNIQUE KEY `unique_date` (`special_lecture_date`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='특강정보';
 ```
+
+강의를 날짜별로 두기위한 리팩토링을 강의생성 api add
+현재 신청한 강의목록 api add
