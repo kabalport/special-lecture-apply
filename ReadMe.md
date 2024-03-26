@@ -31,8 +31,8 @@
 
 - 특강신청자 목록조회 API
 
-# ERD-MYSQL
-![erd-image](./src/main/java/com/tdd/speciallectureapply/document/diagram/3.erd-picture.png)
+# ERD
+![erd-image](./src/main/java/com/tdd/speciallectureapply/document/diagram/img.png)
 - 특강신청정보 DDL
 ```sql
 CREATE TABLE IF NOT EXISTS special_lecture_apply_info (
