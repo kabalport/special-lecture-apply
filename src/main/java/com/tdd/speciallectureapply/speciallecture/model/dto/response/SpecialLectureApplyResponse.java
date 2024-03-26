@@ -12,10 +12,4 @@ import java.time.LocalDate;
 public class SpecialLectureApplyResponse {
     private LocalDate specialLectureDate;
     private String userId;
-//    private ApplyStatus specialLectureApplyStatus;
-
-//    public SpecialLectureApplyResponse(Long applyId, LocalDate specialLectureDate, String userId, ApplyStatus specialLectureApplyStatus) {
-////    }
-
-    // Constructors, Getters and Setters
 }

@@ -1,8 +1,4 @@
-`항해플러스토요일-특강신청서비스`
-
-## 설명
-- 특강을 신청할 수 있는 서비스 개발
-- 특강 신청 및 신청자 목록 관리를 RDBMS를 이용해 관리할 방법을 고민합니다
+`특강신청서비스`
 
 ## 필수사항
 - 아래 2가지 API 를 구현합니다.
@@ -14,14 +10,7 @@
 - 정확하게 30 명의 사용자에게만 특강을 제공할 방법을 고민해 봅니다.
 - 같은 사용자에게 여러 번의 특강 슬롯이 제공되지 않도록 제한할 방법을 고민해 봅니다.
 
-## 요구사항
-- 신청자는 `날짜별로` 특강을 신청합니다.
-- 신청자가 30명 이하라면 특강신청정보에 저장됩니다.
-- 신청자가 30명 초과라면 신청자는 `초과되었습니다`라는 실패했음을 반환합니다.
-- 특강의 정원은 30명으로 고정이며, 사용자는 각 특강에 신청하기전 목록을 조회해볼 수 있어야 합니다.
-- 특강 신청자 수가 최대 정원에 도달했는지를 확인하고, 정원 미달인 경우에만 신청을 허용하는 로직을 구현할 때, 트랜잭션을 사용
-  - 여러사용자가 동시에 신청할경우, 트랜잭션이 각 신청이 순차적으로 처리되도록 관리, 신청과정에서 정원초과가 발생하지않도록하게하기위해
-  - 이과정에서 하나의 트랜잭션이 완료되기전에는 다음 트랜잭션이 시작되지않아 정원초과로인한 신청의 중복을 방지시키기위해서 사용
+
 
 # ERD-MYSQL
 - DDL
@@ -29,13 +18,13 @@
   - special_lecture_apply_info
 ```sql
 CREATE TABLE IF NOT EXISTS special_lecture_apply_info (
-    `apply_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '인조키',
+    `special_lecture_apply_id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '인조키',
     `special_lecture_id` BIGINT NOT NULL COMMENT '특강 ID',
     `special_lecture_date` DATE NOT NULL COMMENT '특강 날짜',
     `user_id` VARCHAR(255) NOT NULL COMMENT '사용자 ID',
     `special_lecture_apply_status` ENUM('pending', 'accepted', 'rejected') NOT NULL COMMENT '특강 신청 상태',
     UNIQUE KEY `unique_user_per_lecture` (`special_lecture_date`, `user_id`),
-    PRIMARY KEY (`apply_id`),
+    PRIMARY KEY (`special_lecture_apply_id`),
     FOREIGN KEY (`special_lecture_id`) REFERENCES special_lecture_info(`special_lecture_id`)
     ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='특강신청정보';

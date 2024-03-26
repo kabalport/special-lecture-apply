@@ -20,7 +20,7 @@ public class SpecialLectureApply {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "apply_id")
+    @Column(name = "special_lecture_apply_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
