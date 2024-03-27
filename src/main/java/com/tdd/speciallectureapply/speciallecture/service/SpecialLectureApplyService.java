@@ -43,10 +43,10 @@ public class SpecialLectureApplyService {
 
 
     @Transactional
-    public synchronized void applyLecture(SpecialLectureApplyRequest request) {
+    public synchronized void applyLecture(LocalDate applyDate,String userId) {
 
-        LocalDate applyDate =request.getApplyDate();
-        String userId = request.getUserId();
+//        LocalDate applyDate =request.getApplyDate();
+//        String userId = request.getUserId();
 
         // 입력 값 검증
         if (applyDate == null) {
