@@ -10,17 +10,30 @@ public class SpecialLectureFixture {
     public static SpecialLecture create(LocalDate lectureDate) {
         return SpecialLecture.builder()
                 .date(lectureDate)
-                .maxCapacity(30) // 최대 정원 30명
-                .currentApplications(0) // 초기 상태는 신청자 없음
+                .maxCapacity(30)
+                .currentApplications(0)
                 .build();
     }
 
-    // 4월 20일 특강에 대한 Fixture 생성 메소드
     public static SpecialLecture april20Lecture() {
         return SpecialLecture.builder()
                 .date(LocalDate.from(LocalDateTime.of(2024, 4, 20, 13, 0)))
-                .maxCapacity(30) // 최대 정원 30명
-                .currentApplications(0) // 현재 신청 인원은 0명으로 시작
+                .maxCapacity(30)
+                .currentApplications(0)
+                .build();
+    }
+    public static SpecialLecture april20LectureFull() {
+        return SpecialLecture.builder()
+                .date(LocalDate.from(LocalDateTime.of(2024, 4, 20, 13, 0)))
+                .maxCapacity(30)
+                .currentApplications(30)
+                .build();
+    }
+    public static SpecialLecture april20LectureFullBefore() {
+        return SpecialLecture.builder()
+                .date(LocalDate.from(LocalDateTime.of(2024, 4, 20, 13, 0)))
+                .maxCapacity(30)
+                .currentApplications(29)
                 .build();
     }
 

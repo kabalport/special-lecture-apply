@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
  *  동일한 신청자는 한 번의 수강 신청만 성공할 수 있습니다.
  *  특강은 `4월 20일 토요일 1시` 에 열리며, 선착순 30명만 신청 가능합니다.
  *  이미 신청자가 30명이 초과되면 이후 신청자는 요청을 실패합니다
+ *  1.
  */
 public class SpecialLectureServiceUnitTest {
     private SpecialLectureService sut;
@@ -45,32 +46,6 @@ public class SpecialLectureServiceUnitTest {
         sut =
                 new SpecialLectureService(specialLectureApplyRepository, specialLectureRepository);
     }
-
-    @DisplayName("강의 생성")
-    @Test
-    public void createLecture_Success() {
-        // given: 강의 날짜와 최대 정원
-        LocalDate givenLectureDate = LocalDate.of(2024, 4, 20);
-        int givenMaxCapacity = 30;
-
-        SpecialLecture expectedLecture = SpecialLecture.builder()
-                .date(givenLectureDate)
-                .maxCapacity(givenMaxCapacity)
-                .currentApplications(0)
-                .build();
-
-        when(specialLectureRepository.save(any(SpecialLecture.class))).thenReturn(expectedLecture);
-
-        // when: 강의 생성 메서드 호출
-        SpecialLecture createdLecture = sut.createLecture(givenLectureDate, givenMaxCapacity);
-
-        // then: 생성된 강의 정보 검증
-        assertNotNull(createdLecture, "생성된 강의 정보는 null이 아니어야 합니다.");
-        assertEquals(givenLectureDate, createdLecture.getDate(), "강의 날짜가 예상과 일치해야 합니다.");
-        assertEquals(givenMaxCapacity, createdLecture.getMaxCapacity(), "강의 최대 정원이 예상과 일치해야 합니다.");
-        assertEquals(0, createdLecture.getCurrentApplications(), "초기 강의 신청 인원은 0이어야 합니다.");
-    }
-
 
     @DisplayName("실패-신청날짜유효성검증/특강신청한 날짜가 과거인 경우 '신청 날짜가 유효하지않습니다.' 라는 예외를 던집니다.")
     @Test

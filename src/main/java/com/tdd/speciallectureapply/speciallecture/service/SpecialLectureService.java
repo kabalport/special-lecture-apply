@@ -33,25 +33,7 @@ public class SpecialLectureService {
     // - 강의생성서비스-강의를 생성합니다,
     // - 강의신청서비스-강의를 신청합니다, 강의신청상태를 확인합니다, 강의신청자목록을 불러옵니다
 
-    /**
-     * 강의를 생성하고 저장합니다.
-     *
-     * @param lectureDate 강의 날짜
-     * @param maxCapacity 강의 최대 정원
-     * @return 생성된 강의 정보
-     */
-    @Transactional
-    public SpecialLecture createLecture(LocalDate lectureDate, int maxCapacity) {
-        // 강의 생성
-        SpecialLecture newLecture = SpecialLecture.builder()
-                .date(lectureDate)
-                .maxCapacity(maxCapacity)
-                .currentApplications(0)
-                .build();
 
-        // 강의 저장
-        return specialLectureRepository.save(newLecture);
-    }
 
 
     /**
