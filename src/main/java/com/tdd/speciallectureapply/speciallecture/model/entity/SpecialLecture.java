@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Builder
@@ -30,10 +31,11 @@ public class SpecialLecture {
     @Column(name = "special_lecture_date", nullable = false, unique = true)
     private LocalDate date;
 
+    @ColumnDefault("30")
     @Column(name = "max_capacity", nullable = false)
     private int maxCapacity;
 
-
+    @ColumnDefault("0")
     @Column(name = "current_applications", nullable = false)
     private int currentApplications;
 

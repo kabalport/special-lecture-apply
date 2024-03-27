@@ -5,7 +5,6 @@ import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureFixture;
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureApplyException;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyStatusResponse;
-import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureResponse;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
 import com.tdd.speciallectureapply.speciallecture.repository.SpecialLectureApplyRepository;
@@ -30,8 +29,8 @@ import static org.mockito.Mockito.when;
  *  이미 신청자가 30명이 초과되면 이후 신청자는 요청을 실패합니다
  *  1.
  */
-public class SpecialLectureServiceUnitTest {
-    private SpecialLectureService sut;
+public class SpecialLectureApplyServiceTest {
+    private SpecialLectureApplyService sut;
     private SpecialLectureApplyRepository specialLectureApplyRepository;
     private SpecialLectureRepository specialLectureRepository;
 
@@ -42,7 +41,7 @@ public class SpecialLectureServiceUnitTest {
         specialLectureApplyRepository = Mockito.mock(SpecialLectureApplyRepository.class);
         specialLectureRepository = Mockito.mock(SpecialLectureRepository.class);
         sut =
-                new SpecialLectureService(specialLectureApplyRepository, specialLectureRepository);
+                new SpecialLectureApplyService(specialLectureApplyRepository, specialLectureRepository);
     }
 
     @DisplayName("실패-신청날짜유효성검증/특강신청한 날짜가 과거인 경우 '신청 날짜가 유효하지않습니다.' 라는 예외를 던집니다.")
@@ -217,25 +216,5 @@ public class SpecialLectureServiceUnitTest {
         assertEquals(2, responses.size(), "신청 목록의 크기가 예상과 다릅니다.");
     }
 
-    @DisplayName("특강 목록 조회")
-    @Test
-    public void 특강목록_조회_성공() {
-        //검증안된것:특강날짜가 같은게 있는지,특강인원수가 넘은게 있는지,데이터가 null 인지 확인
-        // given
-        SpecialLecture expect1 = SpecialLectureFixture.april20Lecture();
-        SpecialLecture expect2 = SpecialLectureFixture.april20Lecture();
-        Mockito.when(specialLectureRepository.findAll())
-                .thenReturn(List.of(expect1, expect2));
 
-        // when
-        var expectResponse =
-                List.of(expect1, expect2).stream()
-                        .map((list) -> new SpecialLectureResponse(list.getDate(), list.getCurrentApplications()))
-                        .toList();
-        List<SpecialLectureResponse> responses = sut.getSpecialLectureList();
-
-        //then
-        Assertions.assertIterableEquals(expectResponse, responses);
-        assertEquals(2, responses.size(), "특강 목록의 크기가 예상과 다릅니다.");
-    }
 }
