@@ -57,10 +57,10 @@ public class SpecialLectureApplyService {
                 .findBySpecialLectureDate(applyDate)
                 .orElseThrow(() -> new SpecialLectureApplyException("해당 날짜에는 특강이 없습니다."));
 
-        // 3. 정원 초과 검사
-        if (lecture.getCurrentApplications() >= lecture.getMaxCapacity()) {
-            throw new SpecialLectureApplyException("정원이 초과되었습니다.");
-        }
+        // 3. 정원 초과 검사 - 도메인에서 정원검사 할거임
+//        if (lecture.getCurrentApplications() >= lecture.getMaxCapacity()) {
+//            throw new SpecialLectureApplyException("정원이 초과되었습니다.");
+//        }
 
         // 4. 중복 신청 검사
         Optional<SpecialLectureApply> isDuplicate = specialLectureApplyRepository
@@ -103,22 +103,4 @@ public class SpecialLectureApplyService {
             );
         }
     }
-
-    /**
-     * TODO - 강의신청자 목록을 가져옵니다.
-     * @param specialLectureDate
-     * @return
-     */
-    public List<SpecialLectureApplyResponse> getPassLectureApplyList(LocalDate specialLectureDate) {
-        List<SpecialLectureApply> lectureApplies = specialLectureApplyRepository.findAll();
-
-        return lectureApplies.stream()
-                .filter((pass) -> pass.getSpecialLectureDate().equals(specialLectureDate))
-                .map((pass) -> new SpecialLectureApplyResponse(pass.getSpecialLectureDate(), pass.getUserId()))
-                .toList();
-    }
-
-
-
-
 }

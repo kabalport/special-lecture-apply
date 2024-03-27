@@ -79,21 +79,21 @@ public class SpecialLectureApplyServiceTest {
         assertEquals("해당 날짜에는 특강이 없습니다.", exception.getMessage());
     }
 
-    @DisplayName("실패-정원검증/정원이 30명 초과인경우 정원이 초과되었습니다. 라는 예외를 던집니다")
-    @Test
-    public void 실패_정원검증_30명초과() {
-        // given : test 라는 유저가 강의를 신청할때 30명이 꽉찬 강의를 리턴시킵니다.
-        SpecialLecture expectSpecialLecture = SpecialLectureFixture.failedMaxCapacity();
-        when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getDate())).thenReturn(Optional.of(expectSpecialLecture));
-
-        // when : test 라는 유저가 정원 30명이 꽉찬 강의를 신청하면 예외를 던져줍니다. - 정원이 초과되었습니다.
-        Exception exception = assertThrows(SpecialLectureApplyException.class, () -> {
-            sut.applyLecture(expectSpecialLecture.getDate(), givenUser);
-        });
-
-        // then : 정원이 초과되었습니다. 나오는지 확인합니다.
-        assertEquals("정원이 초과되었습니다.", exception.getMessage());
-    }
+//    @DisplayName("실패-정원검증/정원이 30명 초과인경우 정원이 초과되었습니다. 라는 예외를 던집니다")
+//    @Test
+//    public void 실패_정원검증_30명초과() {
+//        // given : test 라는 유저가 강의를 신청할때 30명이 꽉찬 강의를 리턴시킵니다.
+//        SpecialLecture expectSpecialLecture = SpecialLectureFixture.failedMaxCapacity();
+//        when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getDate())).thenReturn(Optional.of(expectSpecialLecture));
+//
+//        // when : test 라는 유저가 정원 30명이 꽉찬 강의를 신청하면 예외를 던져줍니다. - 정원이 초과되었습니다.
+//        Exception exception = assertThrows(SpecialLectureApplyException.class, () -> {
+//            sut.applyLecture(expectSpecialLecture.getDate(), givenUser);
+//        });
+//
+//        // then : 정원이 초과되었습니다. 나오는지 확인합니다.
+//        assertEquals("정원이 초과되었습니다.", exception.getMessage());
+//    }
 
     @DisplayName("성공-4월 20일 토요일 1시에 정원이 30명 미만이고 신청유저아이디가 중복이 아니고, 신청날짜에 특강이 존재하고 신청날짜가 유효한경우")
     @Test
@@ -161,58 +161,5 @@ public class SpecialLectureApplyServiceTest {
         SpecialLectureApplyStatusResponse response = sut.getLectureApplicationStatus(successUserId, givenAprilDate);
 
     }
-
-    /**
-     * 특강신청자목록 api
-     */
-
-    @DisplayName("비어있는 특강 신청자 목록 조회")
-    @Test
-    public void 조회_신청자가없을때_비어있는목록반환() {
-        // given
-        LocalDate givenAprilDate = LocalDate.of(2024, 4, 20);
-        Mockito.when(specialLectureApplyRepository.findAll()).thenReturn(List.of());
-
-        // when
-        List<SpecialLectureApplyResponse> responses = sut.getPassLectureApplyList(givenAprilDate);
-
-        // then
-        assertTrue(responses.isEmpty(), "신청자가 없을 때 비어있는 목록이 반환되어야 합니다.");
-    }
-
-
-    @DisplayName("특강 신청자 목록 조회")
-    @Test
-    public void 특강신청자목록_조회_성공() {
-        // given
-        String givenUser1 = "user1";
-        String givenUser2 = "user2";
-        LocalDate givenAprilDate = LocalDate.of(2024, 4, 20);
-
-        SpecialLectureApply expectUser1 = SpecialLectureApplyFixture.create(givenAprilDate, givenUser1);
-        SpecialLectureApply expectUser2 = SpecialLectureApplyFixture.create(givenAprilDate, givenUser2);
-
-
-        Mockito.when(specialLectureApplyRepository.findAll())
-                .thenReturn(List.of(expectUser1, expectUser2));
-
-
-        // when
-        var expectResponse =
-                List.of(expectUser1, expectUser2).stream()
-                        .map((pass) -> new SpecialLectureApplyResponse(pass.getSpecialLectureDate(), pass.getUserId()))
-                        .toList();
-        List<SpecialLectureApplyResponse> responses = sut.getPassLectureApplyList(givenAprilDate);
-
-
-        // then
-//        expectResponse.forEach((response) -> {System.out.println(response.getSpecialLectureDate() + " " + response.getUserId());});
-//        System.out.println("====");
-//        responses.forEach((response) -> System.out.println(response.getSpecialLectureDate() + " " + response.getUserId()));
-
-        Assertions.assertIterableEquals(expectResponse, responses);
-        assertEquals(2, responses.size(), "신청 목록의 크기가 예상과 다릅니다.");
-    }
-
 
 }
