@@ -2,8 +2,7 @@ package com.tdd.speciallectureapply.speciallecture.service;
 
 import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureApplyFixture;
 import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureFixture;
-import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
-import com.tdd.speciallectureapply.speciallecture.model.common.ApplyStatus;
+import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureApplyException;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyStatusResponse;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureResponse;
@@ -18,7 +17,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +52,7 @@ public class SpecialLectureServiceUnitTest {
         LocalDate pastDate = LocalDate.now().minusDays(1); // 오늘 날짜에서 하루를 뺀 과거 날짜
 
         // when: applyLecture 메서드를 호출할 때 이 과거 날짜를 사용하고, 결과로 발생하는 예외를 캡처
-        Exception exception = assertThrows(SpecialLectureException.class, () -> {
+        Exception exception = assertThrows(SpecialLectureApplyException.class, () -> {
             sut.applyLecture(pastDate, givenUser);
         });
 
@@ -72,7 +70,7 @@ public class SpecialLectureServiceUnitTest {
         when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getDate())).thenReturn(Optional.empty());
 
         // when
-        Exception exception = assertThrows(SpecialLectureException.class, () -> {
+        Exception exception = assertThrows(SpecialLectureApplyException.class, () -> {
             sut.applyLecture(expectSpecialLecture.getDate(), givenUser);
         });
 
@@ -88,7 +86,7 @@ public class SpecialLectureServiceUnitTest {
         when(specialLectureRepository.findBySpecialLectureDate(expectSpecialLecture.getDate())).thenReturn(Optional.of(expectSpecialLecture));
 
         // when : test 라는 유저가 정원 30명이 꽉찬 강의를 신청하면 예외를 던져줍니다. - 정원이 초과되었습니다.
-        Exception exception = assertThrows(SpecialLectureException.class, () -> {
+        Exception exception = assertThrows(SpecialLectureApplyException.class, () -> {
             sut.applyLecture(expectSpecialLecture.getDate(), givenUser);
         });
 

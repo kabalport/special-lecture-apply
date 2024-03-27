@@ -13,12 +13,12 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/api/special-lectures")
-public class SpecialLectureController {
+public class SpecialLectureApplyController {
 
     private final SpecialLectureService specialLectureService;
 
     @Autowired
-    public SpecialLectureController(SpecialLectureService specialLectureService) {
+    public SpecialLectureApplyController(SpecialLectureService specialLectureService) {
         this.specialLectureService = specialLectureService;
     }
 

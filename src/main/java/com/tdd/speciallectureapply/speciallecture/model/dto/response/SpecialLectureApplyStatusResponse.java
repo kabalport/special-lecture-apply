@@ -1,6 +1,6 @@
 package com.tdd.speciallectureapply.speciallecture.model.dto.response;
 
-import com.tdd.speciallectureapply.speciallecture.model.common.ApplyStatus;
+import com.tdd.speciallectureapply.speciallecture.model.dto.ApplyStatus;
 
 public class SpecialLectureApplyStatusResponse {
 

@@ -1,7 +1,7 @@
 package com.tdd.speciallectureapply.speciallecture.service;
 
-import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
-import com.tdd.speciallectureapply.speciallecture.model.common.ApplyStatus;
+import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureApplyException;
+import com.tdd.speciallectureapply.speciallecture.model.dto.ApplyStatus;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureResponse;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
@@ -45,23 +45,23 @@ public class SpecialLectureService {
     public void applyLecture(LocalDate applyDate, String userId) {
         // 1. 신청날짜 유효성 검사
         if (!applyDate.isAfter(LocalDate.now())) {
-            throw new SpecialLectureException("신청 날짜가 유효하지않습니다.");
+            throw new SpecialLectureApplyException("신청 날짜가 유효하지않습니다.");
         }
         // 2. 특강 존재 여부 검사
         SpecialLecture lecture = specialLectureRepository
                 .findBySpecialLectureDate(applyDate)
-                .orElseThrow(() -> new SpecialLectureException("해당 날짜에는 특강이 없습니다."));
+                .orElseThrow(() -> new SpecialLectureApplyException("해당 날짜에는 특강이 없습니다."));
 
         // 3. 정원 초과 검사
         if (lecture.getCurrentApplications() >= lecture.getMaxCapacity()) {
-            throw new SpecialLectureException("정원이 초과되었습니다.");
+            throw new SpecialLectureApplyException("정원이 초과되었습니다.");
         }
 
         // 4. 중복 신청 검사
         Optional<SpecialLectureApply> isDuplicate = specialLectureApplyRepository
                 .findByUserIdAndSpecialLectureDate(userId, applyDate);
         if (isDuplicate.isPresent()) {
-            throw new SpecialLectureException("이미 신청된 특강입니다.");
+            throw new SpecialLectureApplyException("이미 신청된 특강입니다.");
         }
         // 특강 신청 처리
         SpecialLectureApply specialLectureApply = SpecialLectureApply.builder()

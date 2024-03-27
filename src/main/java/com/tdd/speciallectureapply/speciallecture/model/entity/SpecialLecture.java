@@ -1,6 +1,6 @@
 package com.tdd.speciallectureapply.speciallecture.model.entity;
 
-import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureException;
+import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureApplyException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,7 +42,7 @@ public class SpecialLecture {
         if (this.currentApplications < this.maxCapacity) {
             this.currentApplications += 1;
         } else {
-            throw new SpecialLectureException("정원이 이미 초과되었습니다.");
+            throw new SpecialLectureApplyException("정원이 이미 초과되었습니다.");
         }
     }
 
