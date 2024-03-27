@@ -27,6 +27,7 @@ public class SpecialLectureApplyController {
 //        SpecialLectureApplyResponse response = specialLectureApplyService.applyLecture(request);
 //        return ResponseEntity.ok(ApiResponse.success(response));
         return null;
+
     }
 
     @GetMapping("/status")
