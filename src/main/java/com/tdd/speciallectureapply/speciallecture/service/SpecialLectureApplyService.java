@@ -22,7 +22,7 @@ import java.util.Optional;
 public class SpecialLectureApplyService {
     private final SpecialLectureApplyRepository specialLectureApplyRepository;
     private final SpecialLectureRepository specialLectureRepository;
-//    private final LockHandler lockHandler;
+    //    private final LockHandler lockHandler;
     @Autowired
     public SpecialLectureApplyService(SpecialLectureApplyRepository specialLectureApplyRepository,
                                       SpecialLectureRepository specialLectureRepository
