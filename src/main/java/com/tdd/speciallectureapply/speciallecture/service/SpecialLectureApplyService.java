@@ -1,8 +1,8 @@
 package com.tdd.speciallectureapply.speciallecture.service;
 
+import com.tdd.speciallectureapply.speciallecture.LockHandler;
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureApplyException;
 import com.tdd.speciallectureapply.speciallecture.model.dto.ApplyStatus;
-import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureResponse;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
@@ -22,12 +22,24 @@ public class SpecialLectureApplyService {
     private final SpecialLectureApplyRepository specialLectureApplyRepository;
     private final SpecialLectureRepository specialLectureRepository;
 
+    private final LockHandler lockHandler;
+
+
     @Autowired
     public SpecialLectureApplyService(SpecialLectureApplyRepository specialLectureApplyRepository,
-                                      SpecialLectureRepository specialLectureRepository) {
+                                      SpecialLectureRepository specialLectureRepository, LockHandler lockHandler) {
         this.specialLectureApplyRepository = specialLectureApplyRepository;
         this.specialLectureRepository = specialLectureRepository;
+        this.lockHandler = lockHandler;
     }
+
+    public void applyLectureWithLock(LocalDate applyDate,Long userId) {
+        lockHandler.executeOnLock(userId, () -> {
+            applyLecture(applyDate, String.valueOf(userId));
+            return null;
+        });
+    }
+
 
     /**
      * TODO - 강의신청을 합니다

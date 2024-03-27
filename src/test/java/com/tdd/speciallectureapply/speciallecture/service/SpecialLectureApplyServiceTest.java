@@ -1,5 +1,6 @@
 package com.tdd.speciallectureapply.speciallecture.service;
 
+import com.tdd.speciallectureapply.speciallecture.LockHandler;
 import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureApplyFixture;
 import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureFixture;
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureApplyException;
@@ -33,15 +34,16 @@ public class SpecialLectureApplyServiceTest {
     private SpecialLectureApplyService sut;
     private SpecialLectureApplyRepository specialLectureApplyRepository;
     private SpecialLectureRepository specialLectureRepository;
-
+    private LockHandler lockHandler;
     private String givenUser = "test";
 
     @BeforeEach
     public void beforeEach() {
         specialLectureApplyRepository = Mockito.mock(SpecialLectureApplyRepository.class);
         specialLectureRepository = Mockito.mock(SpecialLectureRepository.class);
+        lockHandler = Mockito.mock(lockHandler.getClass());
         sut =
-                new SpecialLectureApplyService(specialLectureApplyRepository, specialLectureRepository);
+                new SpecialLectureApplyService(specialLectureApplyRepository, specialLectureRepository, lockHandler);
     }
 
     @DisplayName("실패-신청날짜유효성검증/특강신청한 날짜가 과거인 경우 '신청 날짜가 유효하지않습니다.' 라는 예외를 던집니다.")

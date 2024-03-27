@@ -24,3 +24,10 @@ FOREIGN KEY (`special_lecture_id`) REFERENCES special_lecture_info(`special_lect
 ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='특강신청정보';
 ```
+
+join을 하면 n+1문제가 발생하는데 어떻카지?
+@manytoone(fetch=FetchType.LAzY)??
+실제쿼리로 해결해야한다.???
+
+null이 값이없는지에체크한다.
+메서드 행위확인
