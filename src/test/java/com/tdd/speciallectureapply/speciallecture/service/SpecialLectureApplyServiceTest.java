@@ -41,9 +41,9 @@ public class SpecialLectureApplyServiceTest {
     public void beforeEach() {
         specialLectureApplyRepository = Mockito.mock(SpecialLectureApplyRepository.class);
         specialLectureRepository = Mockito.mock(SpecialLectureRepository.class);
-        lockHandler = Mockito.mock(lockHandler.getClass());
+        lockHandler = Mockito.mock(LockHandler.class);
         sut =
-                new SpecialLectureApplyService(specialLectureApplyRepository, specialLectureRepository, lockHandler);
+                new SpecialLectureApplyService(specialLectureApplyRepository, specialLectureRepository,lockHandler);
     }
 
     @DisplayName("실패-신청날짜유효성검증/특강신청한 날짜가 과거인 경우 '신청 날짜가 유효하지않습니다.' 라는 예외를 던집니다.")

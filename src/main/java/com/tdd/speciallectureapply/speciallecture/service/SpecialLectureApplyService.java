@@ -46,7 +46,7 @@ public class SpecialLectureApplyService {
      * @param applyDate
      * @param userId
      */
-    @Transactional
+//    @Transactional
     public void applyLecture(LocalDate applyDate, String userId) {
         // 1. 신청날짜 유효성 검사
         if (!applyDate.isAfter(LocalDate.now())) {
