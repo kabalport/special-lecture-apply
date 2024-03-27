@@ -24,7 +24,7 @@ public class SpecialLectureApplyController {
 
     @PostMapping("/apply")
     public ResponseEntity<ApiResponse<SpecialLectureApplyResponse>> applyForLecture(@RequestBody SpecialLectureApplyRequest request) {
-//        SpecialLectureApplyResponse response = specialLectureService.applyForLecture(request);
+//        SpecialLectureApplyResponse response = specialLectureApplyService.applyLecture(request);
 //        return ResponseEntity.ok(ApiResponse.success(response));
         return null;
     }

@@ -3,6 +3,7 @@ package com.tdd.speciallectureapply.speciallecture.service;
 import com.tdd.speciallectureapply.speciallecture.LockHandler;
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureApplyException;
 import com.tdd.speciallectureapply.speciallecture.model.dto.ApplyStatus;
+import com.tdd.speciallectureapply.speciallecture.model.dto.request.SpecialLectureApplyRequest;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
 import com.tdd.speciallectureapply.speciallecture.model.dto.response.SpecialLectureApplyResponse;
@@ -40,13 +41,21 @@ public class SpecialLectureApplyService {
 //    }
 
 
-    /**
-     * TODO - 강의신청을 합니다
-     * @param applyDate
-     * @param userId
-     */
+
     @Transactional
-    public synchronized void applyLecture(LocalDate applyDate, String userId) {
+    public synchronized void applyLecture(SpecialLectureApplyRequest request) {
+
+        LocalDate applyDate =request.getApplyDate();
+        String userId = request.getUserId();
+
+        // 입력 값 검증
+        if (applyDate == null) {
+            throw new SpecialLectureApplyException("applyDate는 null이 될 수 없습니다.");
+        }
+        if (userId == null || userId.trim().isEmpty()) {
+            throw new SpecialLectureApplyException("userId는 비어 있을 수 없습니다.");
+        }
+
         // 1. 신청날짜 유효성 검사
         if (!applyDate.isAfter(LocalDate.now())) {
             throw new SpecialLectureApplyException("신청 날짜가 유효하지않습니다.");
@@ -85,6 +94,14 @@ public class SpecialLectureApplyService {
      * @return
      */
     public SpecialLectureApplyStatusResponse getLectureApplicationStatus(String userId, LocalDate date) {
+        // 입력 값 검증
+        if (date == null) {
+            throw new SpecialLectureApplyException("date는 null이 될 수 없습니다.");
+        }
+        if (userId == null || userId.trim().isEmpty()) {
+            throw new SpecialLectureApplyException("userId는 비어 있을 수 없습니다.");
+        }
+
         Optional<SpecialLectureApply> applyOptional = specialLectureApplyRepository.findByUserIdAndSpecialLectureDate(userId,date);
 
         if (applyOptional.isPresent()) {
