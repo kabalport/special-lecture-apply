@@ -27,7 +27,7 @@ public class LockHandler {
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Interrupted while trying to acquire the lock", e);
+            throw new RuntimeException("락 휙득에 실패함", e);
         }
     }
 }

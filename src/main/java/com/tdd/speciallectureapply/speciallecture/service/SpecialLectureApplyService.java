@@ -21,24 +21,23 @@ import java.util.Optional;
 public class SpecialLectureApplyService {
     private final SpecialLectureApplyRepository specialLectureApplyRepository;
     private final SpecialLectureRepository specialLectureRepository;
-
-    private final LockHandler lockHandler;
-
-
+//    private final LockHandler lockHandler;
     @Autowired
     public SpecialLectureApplyService(SpecialLectureApplyRepository specialLectureApplyRepository,
-                                      SpecialLectureRepository specialLectureRepository, LockHandler lockHandler) {
+                                      SpecialLectureRepository specialLectureRepository
+//                                      LockHandler lockHandler
+    ) {
         this.specialLectureApplyRepository = specialLectureApplyRepository;
         this.specialLectureRepository = specialLectureRepository;
-        this.lockHandler = lockHandler;
+//        this.lockHandler = lockHandler;
     }
 
-    public void applyLectureWithLock(LocalDate applyDate,Long userId) {
-        lockHandler.executeOnLock(userId, () -> {
-            applyLecture(applyDate, String.valueOf(userId));
-            return null;
-        });
-    }
+//    public void applyLectureWithLock(LocalDate applyDate,Long userId) {
+//        lockHandler.executeOnLock(userId, () -> {
+//            applyLecture(applyDate, String.valueOf(userId));
+//            return null;
+//        });
+//    }
 
 
     /**
@@ -46,8 +45,8 @@ public class SpecialLectureApplyService {
      * @param applyDate
      * @param userId
      */
-//    @Transactional
-    public void applyLecture(LocalDate applyDate, String userId) {
+    @Transactional
+    public synchronized void applyLecture(LocalDate applyDate, String userId) {
         // 1. 신청날짜 유효성 검사
         if (!applyDate.isAfter(LocalDate.now())) {
             throw new SpecialLectureApplyException("신청 날짜가 유효하지않습니다.");

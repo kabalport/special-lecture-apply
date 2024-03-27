@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,10 +33,12 @@ public class SpecialLectureServiceTest {
     @DisplayName("특강 목록 조회")
     @Test
     public void 특강목록_조회_성공() {
-        //검증안된것:특강날짜가 같은게 있는지,특강인원수가 넘은게 있는지,데이터가 null 인지 확인
         // given
+        LocalDate givenDate = LocalDate.of(2024, 3, 27);
         SpecialLecture expect1 = SpecialLectureFixture.april20Lecture();
-        SpecialLecture expect2 = SpecialLectureFixture.april20Lecture();
+        SpecialLecture expect2 = SpecialLectureFixture.create(givenDate);
+
+
         Mockito.when(specialLectureRepository.findAll())
                 .thenReturn(List.of(expect1, expect2));
 
@@ -48,6 +51,8 @@ public class SpecialLectureServiceTest {
 
         //then
         Assertions.assertIterableEquals(expectResponse, responses);
+        expectResponse.stream().forEach(expectRespons -> System.out.println(expectRespons.getDate()));
+        responses.stream().forEach(response -> System.out.println(response.getDate()));
         assertEquals(2, responses.size(), "특강 목록의 크기가 예상과 다릅니다.");
     }
 }
