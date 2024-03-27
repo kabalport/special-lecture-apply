@@ -13,9 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "special_lecture_apply_info", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"special_lecture_date", "user_id"}, name = "unique_user_per_lecture")
-})
+@Table(name = "special_lecture_apply_info")
 public class SpecialLectureApply {
 
     @Id
