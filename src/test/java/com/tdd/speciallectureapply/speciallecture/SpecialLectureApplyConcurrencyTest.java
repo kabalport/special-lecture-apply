@@ -1,7 +1,6 @@
 package com.tdd.speciallectureapply.speciallecture;
 
 import com.tdd.speciallectureapply.speciallecture.exception.SpecialLectureApplyException;
-import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureApplyFixture;
 import com.tdd.speciallectureapply.speciallecture.model.SpecialLectureFixture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLecture;
 import com.tdd.speciallectureapply.speciallecture.model.entity.SpecialLectureApply;
@@ -20,9 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.IntStream;
-
-import static org.mockito.Mockito.when;
 
 public class SpecialLectureApplyConcurrencyTest {
 
@@ -48,7 +44,7 @@ public class SpecialLectureApplyConcurrencyTest {
         Mockito.when(specialLectureRepository.findBySpecialLectureDate(lectureDate)).thenReturn(Optional.of(lecture));
 
         // When: 동시에 50명의 사용자가 특강 신청을 시도
-        int numberOfApplicants = 2;
+        int numberOfApplicants = 30;
         CompletableFuture<Void>[] futures = new CompletableFuture[numberOfApplicants];
 
         for (int i = 0; i < numberOfApplicants; i++) {
@@ -78,10 +74,6 @@ public class SpecialLectureApplyConcurrencyTest {
         Mockito.verify(specialLectureApplyRepository, Mockito.atLeastOnce()).save(applyCaptor.capture());
 
         List<SpecialLectureApply> appliedLectures = applyCaptor.getAllValues();
-
-        System.out.println("====");
-        System.out.println(appliedLectures);
-        System.out.println(appliedLectures.size());
 
         Assertions.assertTrue(appliedLectures.size() <= maxCapacity, "정원을 초과하여 신청 처리되어서는 안됩니다.");
     }
