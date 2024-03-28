@@ -26,6 +26,15 @@ public class SpecialLectureApplyServiceIntegrationTest {
     private SpecialLectureRepository specialLectureRepository;
 
     @Test
+    public void 특강생성(){
+        String userId = "user222";
+        LocalDate applyDate = LocalDate.of(2024, 6, 22);
+
+        SpecialLecture newLecture = SpecialLectureFixture.create(applyDate);
+        specialLectureRepository.save(newLecture);
+    }
+
+    @Test
     public void 특강신청_성공_통합테스트() {
         // given
         String userId = "user222";
